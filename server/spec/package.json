@@ -1,0 +1,21 @@
+{
+  "name": "react-express-template-server-spec",
+  "version": "1.0.0",
+  "description": "this will have the specific configuration for the server tests",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Trevor Bell",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^25.2.4",
+    "supertest": "^4.0.2"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
+  }
+}
