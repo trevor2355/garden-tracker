@@ -8,13 +8,32 @@ class App extends React.Component {
 
     this.state = {
       plants: [],
-      selectedPlant: {}
+      selectedPlant: ''
     }
+    this.handlePlantChange = this.handlePlantChange.bind(this);
   }
 
   componentDidMount() {
     this.setState({
       plants
+    })
+  }
+
+  handlePlantChange(event) {
+    if (event.target.value === 'placeholder') {
+      this.setState({
+        selectedPlant: ''
+      })
+      return
+    }
+    var value = event.target.value;
+    for (var i = 0; i < plants.length; i++) {
+      if (plants[i].name === value) {
+        var selectedPlant = plants[i];
+      }
+    }
+    this.setState({
+      selectedPlant
     })
   }
 
@@ -27,16 +46,16 @@ class App extends React.Component {
       </div>
       )
     } else {
-      display = <SelectedPlant/>
+      display = <SelectedPlant plant={this.state.selectedPlant}/>
     }
     return (
       <div className='appContainer'>
         <h1>Garden Tracker</h1>
         <div className='buttonContainer'>
-          <select className='plantSelectionButton'>
+          <select className='plantSelectionButton' value={this.state.value} onChange={this.handlePlantChange}>
             <option value='placeholder'>Choose a Plant</option>
             {this.state.plants.map(plant => (
-              <option value={plant.name}>{plant.name}</option>
+              <option value={plant.name} key={plant.id}>{plant.name}</option>
             ))}
           </select>
         </div>
