@@ -1,0 +1,55 @@
+html {
+  font-family: 'Source Sans Pro', sans-serif;
+}
+
+h1 {
+  text-align: center;
+  font-size: calc(75px + 6 * ((100vw - 320px) / 680));
+  color: rgb(59, 59, 59);
+  margin-top: 14%;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.plantSelectionButton {
+  background-color: rgb(122, 197, 8);
+  width: 85%;
+  font-size: calc(46px + 6 * ((100vw - 320px) / 680));
+  padding: 35px;
+  color: white;
+  border-radius: 9px;
+}
+
+option {
+  font-size: 20px;
+}
+
+.iconContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
+}
+
+
+@media screen and (min-width: 1000px) {
+  h1 {
+    font-size: 45px;
+    margin-top: 25px;
+  }
+  .plantSelectionButton {
+    width: 55%;
+    font-size: 40px;
+    padding: 12px;
+  }
+  .iconContainer {
+    height: 70vh;
+  }
+  .plantIcon {
+    width: 300px;
+  }
+}
