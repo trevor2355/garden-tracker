@@ -35,6 +35,15 @@ class App extends React.Component {
     this.setState({
       selectedPlant
     })
+    this.capitilizeFirstLetter = this.capitilizeFirstLetter.bind(this);
+  }
+
+  capitilizeFirstLetter(string) {
+    string = string.toLowerCase()
+    .split(' ')
+    .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+    .join(' ');
+    return string
   }
 
   render() {
@@ -46,7 +55,7 @@ class App extends React.Component {
       </div>
       )
     } else {
-      display = <SelectedPlant plant={this.state.selectedPlant}/>
+      display = <SelectedPlant plant={this.state.selectedPlant} capitilizeFirstLetter={this.capitilizeFirstLetter}/>
     }
     return (
       <div className='appContainer'>
@@ -55,9 +64,12 @@ class App extends React.Component {
           <select className='plantSelectionButton' value={this.state.value} onChange={this.handlePlantChange}>
             <option value='placeholder'>Choose a Plant</option>
             {this.state.plants.map(plant => (
-              <option value={plant.name} key={plant.id}>{plant.name}</option>
+              <option value={plant.name} key={plant.id}>{this.capitilizeFirstLetter(plant.name)}</option>
             ))}
           </select>
+        </div>
+        <div className='inputContainer'>
+          <input id="myFileInput" type="file" accept="image/*;capture=camera"/>
         </div>
         {display}
       </div>

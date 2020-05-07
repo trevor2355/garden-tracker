@@ -30,7 +30,7 @@ module.exports = [
     plantedFrom: 'seed',
     images: [
       {
-        imageurl: 'https://garden-tracker.s3-us-west-1.amazonaws.com/plant_2.jpg',
+        imageurl: 'https://garden-tracker.s3-us-west-1.amazonaws.com/plant_2_mobile.jpg',
         dateTaken: new Date(2020, 4, 5)
       },
     ]
