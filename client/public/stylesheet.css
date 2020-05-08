@@ -4,12 +4,13 @@ html {
 
 body {
   margin: 0;
+  background-color: rgb(255, 254, 253);
 }
 
 h1 {
   text-align: center;
   font-size: calc(75px + 6 * ((100vw - 320px) / 680));
-  color: rgb(59, 59, 59);
+  color: rgb(73, 58, 55);
   margin-top: 8%;
 }
 
@@ -17,14 +18,18 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: center;
+  border: none;
 }
 
-.plantSelectionButton {
-  background-color: rgb(122, 197, 8);
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: rgb(127, 177, 65);
   width: 85%;
   font-size: calc(46px + 6 * ((100vw - 320px) / 680));
   padding: 35px;
-  color: white;
+  color: rgb(255, 253, 249);
   border-radius: 9px;
 }
 
@@ -36,11 +41,14 @@ h1 {
 }
 
 #myFileInput {
-  background-color: rgb(122, 197, 8);
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: rgb(127, 177, 65);
   width: 85%;
   font-size: calc(46px + 6 * ((100vw - 320px) / 680));
   padding: 35px;
-  color: white;
+  color: rgb(255, 253, 249);
   border-radius: 9px;
 }
 
@@ -55,7 +63,7 @@ option {
   height: 70vh;
 }
 .plantInfo {
-  background-color: rgb(229, 213, 192);
+  background-color: rgb(210, 187, 160);
   border-radius: 10px;
   display: flex;
   flex-direction: column;
@@ -67,7 +75,7 @@ option {
   width: 94vw;
   margin-right: 3vw;
   margin-left: 3vw;
-  color: rgb(59, 59, 59);
+  color: rgb(73, 58, 55);
   font-size: calc(32px + 6 * ((100vw - 320px) / 680))
 }
 
@@ -88,19 +96,12 @@ option {
 h4 {
   font-size: calc(75px + 6 * ((100vw - 320px) / 680));
   margin-bottom: calc(40px + 6 * ((100vw - 320px) / 680));
-  color: rgb(59, 59, 59)
+  color: rgb(73, 58, 55)
 }
 
 .plantGrowthImages {
   width: 95%;
   border-radius: 10px;
-}
-
-.footer {
-  margin-top: 14.5vh;
-  height: .5vh;
-  width: 100%;
-  background-color: rgb(122, 197, 8);
 }
 
 @media screen and (min-width: 1000px) {

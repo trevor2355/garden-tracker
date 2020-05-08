@@ -46,6 +46,17 @@ class App extends React.Component {
     return string
   }
 
+  handleUpload(event) {
+    console.log(event.target.files)
+    const file = event.target.files[0];
+    const formData = new FormData()
+    formData.append('image', file)
+    fetch('/s3test', {
+      method: 'POST',
+      body: formData
+    })
+  }
+
   render() {
     var display;
     if (!this.state.selectedPlant.name) {
@@ -61,7 +72,7 @@ class App extends React.Component {
       <div className='appContainer'>
         <h1>Garden Tracker</h1>
         <div className='buttonContainer'>
-          <select className='plantSelectionButton' value={this.state.value} onChange={this.handlePlantChange}>
+          <select value={this.state.value} onChange={this.handlePlantChange}>
             <option value='placeholder'>Choose a Plant</option>
             {this.state.plants.map(plant => (
               <option value={plant.name} key={plant.id}>{this.capitilizeFirstLetter(plant.name)}</option>
@@ -69,7 +80,7 @@ class App extends React.Component {
           </select>
         </div>
         <div className='inputContainer'>
-          <input id="myFileInput" type="file" accept="image/*;capture=camera"/>
+          <input id="myFileInput" type="file" accept="image/*;capture=camera" onChange={this.handleUpload}/>
         </div>
         {display}
       </div>
