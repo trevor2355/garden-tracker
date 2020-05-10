@@ -11,6 +11,8 @@ class App extends React.Component {
       selectedPlant: ''
     }
     this.handlePlantChange = this.handlePlantChange.bind(this);
+    this.capitilizeFirstLetter = this.capitilizeFirstLetter.bind(this);
+    this.handleUpload = this.handleUpload.bind(this);
   }
 
   componentDidMount() {
@@ -35,7 +37,6 @@ class App extends React.Component {
     this.setState({
       selectedPlant
     })
-    this.capitilizeFirstLetter = this.capitilizeFirstLetter.bind(this);
   }
 
   capitilizeFirstLetter(string) {
@@ -47,10 +48,10 @@ class App extends React.Component {
   }
 
   handleUpload(event) {
-    console.log(event.target.files)
     const file = event.target.files[0];
     const formData = new FormData()
     formData.append('image', file)
+    formData.append('plantName', this.state.selectedPlant.name)
     fetch('/s3test', {
       method: 'POST',
       body: formData
@@ -58,16 +59,25 @@ class App extends React.Component {
   }
 
   render() {
+
     var display;
+    var upload;
     if (!this.state.selectedPlant.name) {
       display = (
       <div className='iconContainer'>
         <img className='plantIcon' src='plant-icon.png'></img>
       </div>
       )
+      upload = null;
     } else {
       display = <SelectedPlant plant={this.state.selectedPlant} capitilizeFirstLetter={this.capitilizeFirstLetter}/>
+      upload = (
+        <div className='inputContainer'>
+        <input id="myFileInput" type="file" accept="image/*;capture=camera" onChange={this.handleUpload}/>
+        </div>
+      )
     }
+
     return (
       <div className='appContainer'>
         <h1>Garden Tracker</h1>
@@ -79,9 +89,7 @@ class App extends React.Component {
             ))}
           </select>
         </div>
-        <div className='inputContainer'>
-          <input id="myFileInput" type="file" accept="image/*;capture=camera" onChange={this.handleUpload}/>
-        </div>
+        {upload}
         {display}
       </div>
     )

@@ -1,51 +1,62 @@
+require('dotenv').config()
 const express = require('express');
 const morgan = require('morgan');
 const AWS = require('aws-sdk');
 const uuid = require('uuid');
-const formData = require('express-form-data')
+const fileUpload = require('express-fileupload');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const _ = require('lodash');
+const db = require('./db/connection.js')
 
 const app = express();
 
-// Middleware
+// enable files upload
+app.use(fileUpload({
+  createParentPath: true
+}));
+
+//add other middleware
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(morgan('dev'));
-app.use(formData.parse())
 
 // serve up the react client
 app.use(express.static(`${__dirname}/../client/public`));
 
 //handle the routes here
 app.post('/s3test', (req, res) => {
-  console.log('request received')
-  console.log(req.files.image.path)
-  res.status(201).json({message: 'success'})
-  // Create unique bucket name
-  var bucketName = 'garden-tracker-sugar-peas';
-  // // Create name for uploaded object key
-  // var keyName = 'hello_world.txt';
+  var bucketName = req.body.plantName.replace(' ', '-')
 
-  // // Create a promise on S3 service object
-  // var bucketPromise = new AWS.S3({apiVersion: '2006-03-01'}).createBucket({Bucket: bucketName}).promise();
+  pool.connect((err, client, release) => {
+    if (err) {
+      return console.error('Error acquiring client', err.stack)
+    } else {
+      db.query('SELECT * FROM plants', (err, result) => {
+        if (err) {
+          console.log('ERROR query')
+        } else {
+          console.log('RESULT: ', result.rows)
+        }
+      })
+    }
+  })
 
-  // // Handle promise fulfilled/rejected states
-  // bucketPromise.then(
-  //   function(data) {
-  //     // Create params for putObject call
-  //     var objectParams = {Bucket: bucketName, Key: keyName, Body: 'Hello World!'};
-  //     // Create object upload promise
-  //     var uploadPromise = new AWS.S3({apiVersion: '2006-03-01'}).putObject(objectParams).promise();
-  //     uploadPromise.then(
-  //       function(data) {
-  //         console.log("Successfully uploaded data to " + bucketName + "/" + keyName);
-  //       });
-  // }).catch(
-  //   function(err) {
-  //     console.error(err, err.stack);
-  // });
-  // var objectParams = {Bucket: 'garden-tracker-sugar-peas', Key: 'newImage.txt', Body: req.files.image.path};
+  db.query('SELECT * FROM plants', (err, result) => {
+    if (err) {
+      console.log('ERROR query')
+    } else {
+      console.log('RESULT: ', result.rows)
+    }
+  })
+
+  // var objectParams = {Bucket: 'garden-tracker-sugar-peas', Key: req.files.image.name, Body: req.files.image.data, ContentType: 'image/jpeg', ACL: 'public-read'};
   // var upload = new AWS.S3({apiVersion: '2006-03-01'}).putObject(objectParams).promise();
   // upload
   //   .then(data =>{
-  //     console.log("Successfully uploaded data to " + bucketName + "/newImage.jpg");
+  //     console.log("Successfully uploaded data to " + bucketName + req.files.image.name);
+  //     console.log(`https://${bucketName}.s3.amazonaws.com/${req.files.image.name}`)
   //   })
   //   .catch(err => {
   //     console.error(err, err.stack);
