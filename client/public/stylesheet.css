@@ -56,12 +56,33 @@ option {
   font-size: 20px;
 }
 
+.submitButtonContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  margin-top: 4%;
+}
+
+button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: rgb(127, 177, 65);
+  width: 65%;
+  font-size: calc(46px + 6 * ((100vw - 320px) / 680));
+  padding: 35px;
+  color: rgb(255, 253, 249);
+  border-radius: 9px;
+}
+
 .iconContainer {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 70vh;
 }
+
 .plantInfo {
   background-color: rgb(210, 187, 160);
   border-radius: 10px;

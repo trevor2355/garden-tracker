@@ -1,13 +1,12 @@
 require('dotenv').config()
 const express = require('express');
 const morgan = require('morgan');
-const AWS = require('aws-sdk');
-const uuid = require('uuid');
 const fileUpload = require('express-fileupload');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const _ = require('lodash');
-const db = require('./db/connection.js')
+const models = require('./db/models.js')
+const aws = require('./aws.js')
 
 const app = express();
 
@@ -25,42 +24,61 @@ app.use(morgan('dev'));
 // serve up the react client
 app.use(express.static(`${__dirname}/../client/public`));
 
+
 //handle the routes here
-app.post('/s3test', (req, res) => {
-  var bucketName = req.body.plantName.replace(' ', '-')
 
-  pool.connect((err, client, release) => {
-    if (err) {
-      return console.error('Error acquiring client', err.stack)
-    } else {
-      db.query('SELECT * FROM plants', (err, result) => {
-        if (err) {
-          console.log('ERROR query')
-        } else {
-          console.log('RESULT: ', result.rows)
-        }
-      })
-    }
-  })
+app.get('/api/plants', (req, res) => {
+  models.getPlants()
+    .then(plants => {
+      res.status(200).json( {plants} )
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(400).json( { err })
+    })
+})
 
-  db.query('SELECT * FROM plants', (err, result) => {
-    if (err) {
-      console.log('ERROR query')
-    } else {
-      console.log('RESULT: ', result.rows)
-    }
-  })
+app.get('/api/images', (req, res) => {
+  console.log(req.query)
+  plant_id = req.query.plant_id
+  models.getImages(plant_id)
+    .then(images => {
+      console.log('images: ', images)
+      res.status(200).json( {images} )
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(400).json( {err} )
+    })
+})
 
-  // var objectParams = {Bucket: 'garden-tracker-sugar-peas', Key: req.files.image.name, Body: req.files.image.data, ContentType: 'image/jpeg', ACL: 'public-read'};
-  // var upload = new AWS.S3({apiVersion: '2006-03-01'}).putObject(objectParams).promise();
-  // upload
-  //   .then(data =>{
-  //     console.log("Successfully uploaded data to " + bucketName + req.files.image.name);
-  //     console.log(`https://${bucketName}.s3.amazonaws.com/${req.files.image.name}`)
-  //   })
-  //   .catch(err => {
-  //     console.error(err, err.stack);
-  //   })
+app.post('/api/images', (req, res) => {
+  console.log(req.body.plantName)
+  var plantName = req.body.plantName.replace(' ', '-').replace(' ', '-').replace('(', '').replace(')', '')
+  
+  var bucketName = 'garden-tracker-' + plantName;
+  console.log('bucketName: ', bucketName);
+  var imageName = req.body.name;
+  console.log(imageName);
+  var imageData = req.files.image.data;
+
+  aws.uploadImage(bucketName, imageName, imageData)
+    .then(data => {
+      console.log("Successfully uploaded data to " + bucketName + '-' + imageName);
+      var imageurl = `https://${bucketName}.s3.amazonaws.com/${imageName}`;
+      var date = new Date(parseInt(req.body.dateTaken));
+      var dateTaken = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+      var plant_id = req.body.plant_id;
+      return models.addImage(plant_id, imageurl, dateTaken)
+    })
+    .then(results => {
+      res.status(201).json({ message: 'Successfully uploaded ' + imageName})
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json({ err })
+    })
+
 })
 
 module.exports = app;
