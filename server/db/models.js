@@ -4,6 +4,7 @@ const addImage = (plant_id, imageurl, dateTaken) => {
   return new Promise ((resolve, reject) => {
     db.connect((err, client, release) => {
       if (err) {
+        console.log('YOU HAVE AN ERROR:', err)
         reject(err)
       }
       client.query(`INSERT INTO images (plant_id, imageurl, date_taken) VALUES (${plant_id}, '${imageurl}', '${dateTaken}')`, (err, result) => {
@@ -24,6 +25,7 @@ const getPlants = () => {
       if (err) {
         reject(err)
       }
+      console.log(client);
       console.log('connected with database through pool')
       client.query('SELECT * FROM plants', (err, result) => {
         release()
