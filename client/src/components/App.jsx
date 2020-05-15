@@ -63,6 +63,20 @@ class App extends React.Component {
     return string
   }
 
+  handlePhotoSelect(event) {
+    let file = event.target.files[0];
+    const dateTaken = file.lastModified
+    const formData = new FormData()
+    formData.append('rawImage', file)
+    formData.append('plantName', this.state.selectedPlant.name)
+    formData.append('dateTaken', dateTaken)
+    formData.append('plant_id', this.state.selectedPlant.id)
+    this.setState({
+      selectedImage: formData,
+      file: file
+    })
+  }
+
   handleUpload() {
     this.setState({
       uploading: true
@@ -118,23 +132,7 @@ class App extends React.Component {
         console.log(error.message);
       });
 
-  }
-
-  
-
-  handlePhotoSelect(event) {
-    let file = event.target.files[0];
-    const dateTaken = file.lastModified
-    const formData = new FormData()
-    formData.append('rawImage', file)
-    formData.append('plantName', this.state.selectedPlant.name)
-    formData.append('dateTaken', dateTaken)
-    formData.append('plant_id', this.state.selectedPlant.id)
-    this.setState({
-      selectedImage: formData,
-      file: file
-    })
-  }
+  }  
 
   render() {
     var display;
