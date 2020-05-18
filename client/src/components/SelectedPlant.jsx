@@ -1,12 +1,16 @@
 import React from 'react';
+import UpdateImageModal from './UpdateImageModal.jsx'
 
 class SelectedPlant extends React.Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      images: []
+      images: [],
+      showUpdateImageModal: false
     }
+    this.handleDelete = this.handleDelete.bind(this);
+    this.toggleUpdateImageModal = this.toggleUpdateImageModal.bind(this);
   }
 
   componentDidMount() {
@@ -31,10 +35,32 @@ class SelectedPlant extends React.Component {
     })
   }
 
+  handleDelete(event) {
+    var id = event.target.id;
+    var options = {
+      method: 'DELETE',
+    }
+    fetch(`/api/images?id=${id}`, options)
+      .then(response => {
+        this.forceUpdate()
+      })
+      .catch(err => {
+        console.log(err)
+      })
+
+  }
+
   getAbrevDate() {
     var datePlanted = this.props.plant.date_planted.toString();
     var index = datePlanted.indexOf('2020')
     return datePlanted.slice(0, index - 1)
+  }
+
+  toggleUpdateImageModal() {
+    var toggle = !this.state.showUpdateImageModal
+    this.setState({
+      showUpdateImageModal: toggle
+    })
   }
 
   render() {
@@ -44,7 +70,6 @@ class SelectedPlant extends React.Component {
     } else {
       image = (<img src={this.state.images[0].imageurl} className='mostRecentPlant'/>)
     }
-    console.log(this.props.plant)
     return (
       <div>
         <div className='plantInfo'>
@@ -59,6 +84,9 @@ class SelectedPlant extends React.Component {
           <div className='growthPeriod' key={image.imageurl}>
             <h4>Day {Math.ceil((  new Date(image.date_taken.replace(' ', 'T')) - new Date(this.props.plant.date_planted.replace(' ', 'T'))  ) / (1000 * 60 * 60 * 24) + 1)}</h4>
             <img src={image.imageurl} className='plantGrowthImages'/>
+            <img src='./delete-icon.jpeg' onClick={this.handleDelete} id={image.id}/>
+            <img src='./edit-icon.png' onClick={this.toggleUpdateImageModal} id={image.id}/>
+            <UpdateImageModal show={this.state.showUpdateImageModal} close={this.toggleUpdateImageModal} image={image} />
           </div>
         ))}
       </div>

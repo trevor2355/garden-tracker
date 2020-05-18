@@ -25,8 +25,6 @@ const getPlants = () => {
       if (err) {
         reject(err)
       }
-      console.log(client);
-      console.log('connected with database through pool')
       client.query('SELECT * FROM plants', (err, result) => {
         release()
         if (err) {
@@ -39,13 +37,13 @@ const getPlants = () => {
   })
 }
 
-const getImages = id => {
+const getImages = plant_id => {
   return new Promise ((resolve, reject) => {
     db.connect((err, client, release) => {
       if (err) {
         reject(err)
       }
-      client.query(`SELECT * FROM images WHERE plant_id=${id}`, (err, result) => {
+      client.query(`SELECT * FROM images WHERE plant_id=${plant_id}`, (err, result) => {
         release()
         if (err) {
           reject(err)
@@ -57,8 +55,28 @@ const getImages = id => {
   })
 }
 
+const deleteImage = id => {
+  return new Promise ((resolve, reject) => {
+    db.connect((err, client, release) => {
+      if (err) {
+        reject(err)
+      }
+      console.log('id: ', id)
+      client.query(`DELETE FROM images WHERE id=${id}`, (err, result) => {
+        release()
+        if (err) {
+          reject(err)
+        } else {
+          resolve(result)
+        }
+      })
+    })
+  })
+}
+
 module.exports = {
   addImage,
   getPlants,
-  getImages
+  getImages,
+  deleteImage
 }

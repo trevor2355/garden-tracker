@@ -125,6 +125,37 @@ h4 {
   border-radius: 10px;
 }
 
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width:100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.modal-main {
+  position:fixed;
+  background: white;
+  width: 80%;
+  height: auto;
+  top:50%;
+  left:50%;
+  transform: translate(-50%,-50%);
+}
+
+.imageTakenOnText-UpdateImageModal {
+  font-size: 80px; 
+}
+
+.imageTakenOnInput-UpdateImageModal {
+  height: 40px;
+}
+
+.close-UpdateImageModal {
+  
+}
+
 @media screen and (min-width: 1000px) {
   h1 {
     font-size: 45px;

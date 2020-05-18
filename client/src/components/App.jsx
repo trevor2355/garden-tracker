@@ -10,7 +10,8 @@ class App extends React.Component {
       plants: [],
       selectedPlant: '',
       selectedImage: undefined,
-      uploading: false
+      uploading: false,
+      date: new Date()
     }
     this.handlePlantChange = this.handlePlantChange.bind(this);
     this.capitilizeFirstLetter = this.capitilizeFirstLetter.bind(this);
@@ -132,7 +133,7 @@ class App extends React.Component {
         console.log(error.message);
       });
 
-  }  
+  }
 
   render() {
     var display;

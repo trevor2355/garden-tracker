@@ -39,17 +39,19 @@ app.get('/api/plants', (req, res) => {
 })
 
 app.get('/api/images', (req, res) => {
-  console.log(req.query)
   plant_id = req.query.plant_id
   models.getImages(plant_id)
     .then(images => {
-      console.log('images: ', images)
       res.status(200).json( {images} )
     })
     .catch(err => {
       console.log(err)
       res.status(400).json( {err} )
     })
+})
+
+app.post('/api/plants', (req, res) => {
+
 })
 
 app.post('/api/images', (req, res) => {
@@ -79,6 +81,24 @@ app.post('/api/images', (req, res) => {
       res.status(500).json({ err })
     })
 
+})
+
+app.delete('/api/images', (req, res) => {
+  console.log("ATTEMPT DELETE")
+  var id = req.query.id;
+  models.deleteImage(id)
+    .then(response => {
+      console.log(response)
+      res.status(204).json({ message: 'Successfully deleted image id: ' + id})
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json({ err })
+    })
+})
+
+app.delete('/api/plants', (req, res) => {
+  
 })
 
 module.exports = app;
